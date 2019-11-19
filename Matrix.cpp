@@ -3,12 +3,21 @@
 #include "Matrix.h"
 using namespace std;
 
+/**
+ * Instantiates a 1x1 Matrix.
+ */
 Matrix::Matrix()
 {
     rows.resize(1);
     rows[0].resize(1);
 }
 
+/**
+ * Instantiates a numberOfRows x numberOfColumns Matrix.
+ * 
+ * @param numberOfRows the number of rows in the matrix.
+ * @param numberOfColumns the number of columns in the matrix.
+ */
 Matrix::Matrix(const size_t numberOfRows, const size_t numberOfColumns)
 {
     rows.resize(numberOfRows);
@@ -18,10 +27,19 @@ Matrix::Matrix(const size_t numberOfRows, const size_t numberOfColumns)
     }
 }
 
+/**
+ * Deconstructs the Matrix.
+ */
 Matrix::~Matrix()
 {
 }
 
+/**
+ * Adds two matrices together.
+ * 
+ * @param otherMatrix is a reference to the second Matrix in the equation.
+ * @param answer is the Matrix which will contain the sum.
+ */
 void Matrix::add(const Matrix &otherMatrix, Matrix &answer)
 {
     if (rows.size() != otherMatrix.rows.size() || rows[0].size() != otherMatrix.rows[0].size())
@@ -41,6 +59,12 @@ void Matrix::add(const Matrix &otherMatrix, Matrix &answer)
     }
 }
 
+/**
+ * Multiplies two matrices together.
+ * 
+ * @param otherMatrix the second Matrix in the equation.
+ * @param answer the Matrix which will hold the product.
+ */
 void Matrix::multiply(const Matrix &otherMatrix, Matrix &answer)
 {
     if (rows[0].size() != otherMatrix.rows.size())
@@ -66,6 +90,12 @@ void Matrix::multiply(const Matrix &otherMatrix, Matrix &answer)
     }
 }
 
+/**
+ * Multiplies a Matrix by the given scalar.
+ * 
+ * @param scalar the scalar by which to multiply the Matrix.
+ * @param answer the Matrix which will hold the product.
+ */
 void Matrix::multiply(const double scalar, Matrix &answer)
 {
     for (unsigned long i = 0; i < rows.size(); i++)
@@ -77,18 +107,49 @@ void Matrix::multiply(const double scalar, Matrix &answer)
     }
 }
 
+/**
+ * Subtracts one Matrix from another.
+ * 
+ * @param otherMatrix the Matrix to subtract.
+ * @param answer the Matrix which will hold the difference.
+ */
 void Matrix::subtract(const Matrix &otherMatrix, Matrix &answer)
 {
 }
 
+/**
+ * Divides a Matrix by another Matrix.
+ * 
+ * @param otherMatrix the divisor.
+ * @param answer the Matrix which will hold the quotient.
+ */
 void Matrix::divide(const Matrix &otherMatrix, Matrix &answer)
 {
 }
 
+/**
+ * Transposes a Matrix.
+ * 
+ * @param desitnationMatrix the Matrix which will become the transpose of the calling Matrix.
+ */
 void Matrix::transpose(Matrix &desitnationMatrix)
 {
+    desitnationMatrix.rows.resize(rows[0].size());
+    for (unsigned long i = 0; i < rows[0].size(); i++)
+    {
+        desitnationMatrix.rows[i].resize(rows.size());
+        for (unsigned long j = 0; j < rows.size(); j++)
+        {
+            desitnationMatrix.rows[i][j] = rows[j][i];
+        }
+    }
 }
 
+/**
+ * Generates the Identity Matrix of the calling Matrix.
+ * 
+ * @param eye the Matrix which will become the Identity Matrix.
+ */
 void Matrix::generateIdentity(Matrix &eye)
 {
     const unsigned long rowCount = (unsigned long)rows.size();
@@ -110,6 +171,9 @@ void Matrix::generateIdentity(Matrix &eye)
     }
 }
 
+/**
+ * Prints the elements of the Matrix in a grid format.
+ */
 void Matrix::print()
 {
     cout << "\n";
@@ -124,6 +188,9 @@ void Matrix::print()
     cout << "\n";
 }
 
+/**
+ * The main program.
+ */
 int main()
 {
     Matrix A = Matrix();
@@ -157,6 +224,10 @@ int main()
     Matrix product = Matrix();
     B.multiply(C, product);
     product.print();
+
+    Matrix trans = Matrix();
+    B.transpose(trans);
+    trans.print();
 
     return 0;
 }
