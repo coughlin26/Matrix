@@ -22,7 +22,7 @@ Matrix::~Matrix()
 {
 }
 
-void Matrix::add(Matrix &otherMatrix, Matrix &answer)
+void Matrix::add(const Matrix &otherMatrix, Matrix &answer)
 {
     if (rows.size() != otherMatrix.rows.size() || rows[0].size() != otherMatrix.rows[0].size())
     {
@@ -30,24 +30,58 @@ void Matrix::add(Matrix &otherMatrix, Matrix &answer)
         return;
     }
 
+    answer.rows.resize(rows.size());
     for (unsigned long i = 0; i < rows.size(); i++)
     {
-        for (unsigned long j = 0; j < rows[0].size(); j++)
+        answer.rows[i].resize(rows[i].size());
+        for (unsigned long j = 0; j < otherMatrix.rows[0].size(); j++)
         {
             answer.rows[i][j] = rows[i][j] + otherMatrix.rows[i][j];
         }
     }
 }
 
-void Matrix::multiply(Matrix &otherMatrix, Matrix &answer)
+void Matrix::multiply(const Matrix &otherMatrix, Matrix &answer)
+{
+    if (rows[0].size() != otherMatrix.rows.size())
+    {
+        cout << "Error, the number of columns in the left matrix must equal the number of rows in the right matrix!\n";
+        return;
+    }
+
+    answer.rows.resize(rows.size());
+    for (unsigned long i = 0; i < rows.size(); i++)
+    {
+        answer.rows[i].resize(otherMatrix.rows[i].size());
+        for (unsigned long j = 0; j < otherMatrix.rows[0].size(); j++)
+        {
+            double sum = 0;
+            for (unsigned long n = 0; n < rows[0].size(); n++)
+            {
+                sum += rows[i][n] * otherMatrix.rows[n][j];
+            }
+
+            answer.rows[i][j] = sum;
+        }
+    }
+}
+
+void Matrix::multiply(const double scalar, Matrix &answer)
+{
+    for (unsigned long i = 0; i < rows.size(); i++)
+    {
+        for (unsigned long j = 0; j < rows[i].size(); j++)
+        {
+            answer.rows[i][j] = scalar * rows[i][j];
+        }
+    }
+}
+
+void Matrix::subtract(const Matrix &otherMatrix, Matrix &answer)
 {
 }
 
-void Matrix::subtract(Matrix &otherMatrix, Matrix &answer)
-{
-}
-
-void Matrix::divide(Matrix &otherMatrix, Matrix &answer)
+void Matrix::divide(const Matrix &otherMatrix, Matrix &answer)
 {
 }
 
@@ -65,13 +99,10 @@ void Matrix::generateIdentity(Matrix &eye)
     }
 
     eye.rows.resize(rowCount);
-    for (unsigned long row = 0; row < rowCount; row++)
-    {
-        eye.rows[row].resize(rowCount);
-    }
 
     for (unsigned long row = 0; row < rowCount; row++)
     {
+        eye.rows[row].resize(rowCount);
         for (unsigned long column = 0; column < rowCount; column++)
         {
             eye.rows[row][column] = row == column ? 1 : 0;
@@ -97,7 +128,8 @@ int main()
 {
     Matrix A = Matrix();
     Matrix B = Matrix(3, 3);
-    B.rows[2][1] = 7;
+    B.rows[0][2] = 1;
+    B.rows[2][1] = 2;
 
     A.print();
     B.print();
@@ -110,6 +142,21 @@ int main()
     Matrix sum = Matrix(3, 3);
     B.add(eye, sum);
     sum.print();
+
+    Matrix C = Matrix(3, 4);
+    for (short i = 0; i < C.rows.size(); i++)
+    {
+        for (short j = 0; j < C.rows[i].size(); j++)
+        {
+            C.rows[i][j] = rand() % 100;
+        }
+    }
+
+    C.print();
+
+    Matrix product = Matrix();
+    B.multiply(C, product);
+    product.print();
 
     return 0;
 }
