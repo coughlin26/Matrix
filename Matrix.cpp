@@ -22,19 +22,32 @@ Matrix::~Matrix()
 {
 }
 
-void Matrix::add(Matrix &otherMatrix)
+void Matrix::add(Matrix &otherMatrix, Matrix &answer)
+{
+    if (rows.size() != otherMatrix.rows.size() || rows[0].size() != otherMatrix.rows[0].size())
+    {
+        cout << "Error, the matrices must have the same dimensions!\n";
+        return;
+    }
+
+    for (unsigned long i = 0; i < rows.size(); i++)
+    {
+        for (unsigned long j = 0; j < rows[0].size(); j++)
+        {
+            answer.rows[i][j] = rows[i][j] + otherMatrix.rows[i][j];
+        }
+    }
+}
+
+void Matrix::multiply(Matrix &otherMatrix, Matrix &answer)
 {
 }
 
-void Matrix::multiply(Matrix &otherMatrix)
+void Matrix::subtract(Matrix &otherMatrix, Matrix &answer)
 {
 }
 
-void Matrix::subtract(Matrix &otherMatrix)
-{
-}
-
-void Matrix::divide(Matrix &otherMatrix)
+void Matrix::divide(Matrix &otherMatrix, Matrix &answer)
 {
 }
 
@@ -90,9 +103,13 @@ int main()
     B.print();
 
     Matrix eye = Matrix();
-    B.generateIdentity(eye);
-
     eye.print();
+    B.generateIdentity(eye);
+    eye.print();
+
+    Matrix sum = Matrix(3, 3);
+    B.add(eye, sum);
+    sum.print();
 
     return 0;
 }
