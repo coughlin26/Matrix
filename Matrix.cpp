@@ -123,8 +123,11 @@ void Matrix::subtract(const Matrix &otherMatrix, Matrix &answer)
  * @param otherMatrix the divisor.
  * @param answer the Matrix which will hold the quotient.
  */
-void Matrix::divide(const Matrix &otherMatrix, Matrix &answer)
+void Matrix::divide(Matrix &otherMatrix, Matrix &answer)
 {
+    Matrix flippedMatrix = Matrix();
+    otherMatrix.transpose(flippedMatrix);
+    multiply(flippedMatrix, answer);
 }
 
 /**
@@ -228,6 +231,10 @@ int main()
     Matrix trans = Matrix();
     B.transpose(trans);
     trans.print();
+
+    Matrix quotient = Matrix();
+    B.divide(B, quotient);
+    quotient.print();
 
     return 0;
 }

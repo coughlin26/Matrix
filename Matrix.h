@@ -15,7 +15,7 @@ public:
     void multiply(const Matrix &otherMatrix, Matrix &answer);
     void multiply(const double scalar, Matrix &answer);
     void subtract(const Matrix &otherMatrix, Matrix &answer);
-    void divide(const Matrix &otherMatrix, Matrix &answer);
+    void divide(Matrix &otherMatrix, Matrix &answer);
     void transpose(Matrix &destinationMatrix);
     void generateIdentity(Matrix &eye);
     void print();
